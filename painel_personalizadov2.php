@@ -17,19 +17,28 @@ class Segundo_plugin{
             self::$instance = new self();
         }
     }
-}
-// desativar a ction welcome_panel
-remove_action('welcome_panel', 'wp_welcome_panel');
-add_action('welcome_panel','my_welcome_panel');
+    private function __construct(){
+        // desativar a ction welcome_panel
+        remove_action('welcome_panel', 'wp_welcome_panel');
+        add_action('welcome_panel',array($this,'welcome_panel'));
+        add_action('admin_enqueue_scripts',array($this,'add_css'));
 
-function my_welcome_panel(){
-    ?>
-    <div class="welcome-panel-content">
-        <h3>Seja bem vindo Ao mundo de Bob</h3>
-    </div>
-<?php 
+    }
+    function welcome_panel(){
+        ?>
+        <div class="welcome-panel-content">
+            <h3>Seja bem vindo Ao mundo de Bob</h3>
+        </div>
+    <?php 
+    }
+
+    function add_css(){
+        wp_register_style('meu-segundo-plugin',plugin_dir_url(__FILE__).'css/meu-segundo-plugin.css');
+        wp_enqueue_style('meu-segundo-plugin');
+    }
 }
-function add_css(){
-    wp_register_style('meu-segundo-plugin',plugin_dir_url(__FILE__).'css/meu-segundo-plugin.css');
-    wp_enqueue_style('meu-segundo-plugin');
-}
+
+
+Segundo_plugin::getInstance();
+
+
